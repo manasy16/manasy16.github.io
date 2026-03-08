@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manas Yadav - AI/ML Developer Portfolio</title>
+    <link href="portfolio.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body id="top">
+    <!-- Enhanced Background Elements -->
+    <div class="cyber-bg">
+        <div class="cyber-gradient"></div>
+        <div class="matrix-rain" id="matrixRain"></div>
+    </div>
+    
+    <div class="particles" id="particlesContainer"></div>
+    
+    <div class="data-streams" id="dataStreams"></div>
+    
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+    
+    <div class="grid-overlay">
+        <div class="grid-lines"></div>
+        <div class="grid-glow"></div>
+    </div>
+    
+    <div class="scanlines"></div>
+    <div class="noise-overlay"></div>
+    
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#top" class="logo">Manas Yadav</a>
+            <ul class="nav-links">
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#exploring">Exploring</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="nav-bottom">
+                <a href="#contact" class="cyber-button">Get in Touch</a>
+            </div>
+            <button class="mobile-menu-button" id="mobileMenuBtn">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <a href="#top" class="mobile-menu-logo">Manas Yadav</a>
+            <button class="mobile-menu-close" id="mobileMenuClose">✕</button>
+        </div>
+        <div class="mobile-menu-cta">
+            <a href="#contact" class="cyber-button">Get in Touch</a>
+        </div>
+        <nav class="mobile-menu-nav">
+            <ul>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#exploring">Exploring</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <h1 class="hero-title">
+                <span class="hero-name">Manas Yadav</span>
+            </h1>
+            <p class="hero-subtitle">AI/ML Developer | Backend Developer | Cybersecurity Enthusiast</p>
+            <p class="hero-description">An engineering enthusiast exploring the intersection of Machine Learning and Cybersecurity to build intelligent systems that solve real-world problems securely.</p>
+            
+            <div class="hero-buttons">
+                <a href="#projects" class="btn-primary">View Projects</a>
+                <a href="https://github.com/manasy16" target="_blank" rel="noopener noreferrer" class="btn-secondary">GitHub</a>
+                <a href="https://leetcode.com/u/Manasyd16/" target="_blank" rel="noopener noreferrer" class="btn-secondary">LeetCode</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects fade-up" id="projects">
+        <div class="projects-container">
+            <div class="section-header">
+                <h2 class="section-title">Featured Projects</h2>
+                <p class="section-subtitle">AI/ML and full-stack applications I've built</p>
+            </div>
+            
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>Spam Classifier</h3>
+                        <div class="project-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">ML</span>
+                        </div>
+                    </div>
+                    <p class="project-description">Machine learning model that classifies emails or SMS messages as spam or not spam. Includes preprocessing, feature extraction, and prediction using trained models.</p>
+                    <div class="project-tech">
+                        <span>Python</span>
+                        <span>Scikit-learn</span>
+                        <span>Streamlit</span>
+                    </div>
+                    <a href="https://github.com/manasy16/Spam--Classifier-streamlit-" target="_blank" rel="noopener noreferrer" class="project-github">GitHub</a>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>ARGO Chatbot</h3>
+                        <div class="project-tags">
+                            <span class="tag">Full-Stack</span>
+                            <span class="tag">SIH 2025</span>
+                        </div>
+                    </div>
+                    <p class="project-description">AI chatbot that retrieves and presents oceanographic data from the ARGO ocean observation program. Extracts temperature and salinity data, processes scientific datasets.</p>
+                    <div class="project-tech">
+                        <span>Python</span>
+                        <span>FastAPI</span>
+                        <span>AI APIs</span>
+                        <span>PostgreSQL</span>
+                    </div>
+                    <a href="https://github.com/manasy16/ARGO-CAHTBOT---SIH-PROJECT-2025" target="_blank" rel="noopener noreferrer" class="project-github">GitHub</a>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>YouTube Video Chatbot</h3>
+                        <div class="project-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">LLM</span>
+                        </div>
+                    </div>
+                    <p class="project-description">AI chatbot that answers questions based on YouTube video content using transcript processing and language models. Extracts transcripts and uses LLM for intelligent Q&A.</p>
+                    <div class="project-tech">
+                        <span>Python</span>
+                        <span>LangChain</span>
+                        <span>LLM APIs</span>
+                    </div>
+                    <a href="https://github.com/manasy16/YOUTUBE-VIDEO-CHATBOT-" target="_blank" rel="noopener noreferrer" class="project-github">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="skills fade-up" id="skills">
+        <div class="skills-container">
+            <div class="section-header">
+                <h2 class="section-title">Technical Skills</h2>
+                <p class="section-subtitle">Tools and technologies I work with</p>
+            </div>
+            
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3 class="skill-category-title">Programming</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">C</span>
+                        <span class="skill-tag">C++</span>
+                        <span class="skill-tag">JavaScript</span>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3 class="skill-category-title">Machine Learning</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">NumPy</span>
+                        <span class="skill-tag">Pandas</span>
+                        <span class="skill-tag">Matplotlib</span>
+                        <span class="skill-tag">Scikit-learn</span>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3 class="skill-category-title">Backend</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">FastAPI</span>
+                        <span class="skill-tag">Flask</span>
+                        <span class="skill-tag">REST APIs</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3 class="skill-category-title">Tools</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Git</span>
+                        <span class="skill-tag">Linux / Kali</span>
+                        <span class="skill-tag">Docker</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3 class="skill-category-title">Working With</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">LangChain</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Currently Exploring Section -->
+    <section class="exploring fade-up" id="exploring">
+        <div class="exploring-container">
+            <div class="section-header">
+                <h2 class="section-title">Currently Exploring</h2>
+                <p class="section-subtitle">Areas of interest and ongoing learning</p>
+            </div>
+            
+            <div class="exploring-grid">
+                <div class="exploring-card">
+                    <h3>Deep Learning</h3>
+                </div>
+                
+                <div class="exploring-card">
+                    <h3>Agentic AI</h3>
+                </div>
+                
+                <div class="exploring-card">
+                    <h3>LangChain RAG Pipelines</h3>
+                </div>
+                
+                <div class="exploring-card">
+                    <h3>Cybersecurity with Kali Linux</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="education-section">
+        <h2 class="section-title">Education</h2>
+        <p class="section-subtitle">Academic background and qualifications</p>
+
+        <div class="education-timeline">
+            <!-- B.Tech -->
+            <div class="edu-item">
+                <div class="edu-dot"></div>
+                <div class="edu-content">
+                    <h3>Bachelor of Technology (B.Tech) – Computer Science Engineering</h3>
+                    <p class="college">G.L Bajaj Institute of Technology and Management (AKTU)</p>
+                    <p class="year">2023 – 2027</p>
+                </div>
+            </div>
+
+            <!-- Class XII -->
+            <div class="edu-item">
+                <div class="edu-dot"></div>
+                <div class="edu-content">
+                    <h3>Senior Secondary Education (Class XII)</h3>
+                    <p class="college">Kendriya Vidyalaya Sangathan (CBSE)</p>
+                    <p class="year">Completed in 2022</p>
+                </div>
+            </div>
+
+            <!-- Class X -->
+            <div class="edu-item">
+                <div class="edu-dot"></div>
+                <div class="edu-content">
+                    <h3>Secondary Education (Class X)</h3>
+                    <p class="college">Kendriya Vidyalaya Sangathan (CBSE)</p>
+                    <p class="year">Completed in 2020</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact fade-up" id="contact">
+        <div class="contact-container">
+            <div class="section-header">
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="section-subtitle">Let's collaborate on exciting projects</p>
+            </div>
+            
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <h3>Contact Information</h3>
+                    <div class="contact-item">
+                        <span class="contact-label">Email</span>
+                        <a href="mailto:manasyd2005@gmail.com" class="contact-link">manasyd2005@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-label">Location</span>
+                        <p class="contact-text">New Delhi, India</p>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-label">GitHub</span>
+                        <a href="https://github.com/manasy16" target="_blank" rel="noopener noreferrer" class="contact-link">https://github.com/manasy16</a>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-label">LeetCode</span>
+                        <p class="contact-text">Add later</p>
+                    </div>
+                </div>
+                
+                <div class="contact-form-wrapper">
+                    <div class="contact-form">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" placeholder="Your name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" placeholder="Tell me about your project..." required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary btn-submit">Send Message</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="mailto:manasyd2005@gmail.com">Email</a>
+                <span class="footer-separator">•</span>
+                <a href="https://github.com/manasy16" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <span class="footer-separator">•</span>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Manas Yadav. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="portfolio.js"></script>
+</body>
+</html>
