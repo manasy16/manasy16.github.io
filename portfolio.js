@@ -1,5 +1,22 @@
 /* Portfolio JS — Manas Yadav */
 
+// ─── Firebase Setup ───────────────────────────────────────
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBYAhzzY_kUqdFh29qDq9Mos4IKA3VMDIU",
+  authDomain: "manas-portfolio-5161d.firebaseapp.com",
+  projectId: "manas-portfolio-5161d",
+  storageBucket: "manas-portfolio-5161d.firebasestorage.app",
+  messagingSenderId: "364563439853",
+  appId: "1:364563439853:web:cd2a4944795cc0517eece4"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+const PROJECTS_COL = "projects";
+
 // ─── Typed effect ────────────────────────────────────────
 const phrases = [
   "AI / ML Developer",
@@ -112,43 +129,42 @@ if (contactForm) {
     }
   });
 }
-// ─── Hidden Admin Panel (add/remove projects) ────────────
-// To open: click the "MY." logo 5 times within 1.5s, then enter the password.
-// Password is stored as a SHA-256 hash so it isn't visible in plain text.
-// Default password: GLB2027Manas!  — change PASS_HASH below to your own
-// (generate with: echo -n "yourpassword" | sha256sum)
+// ─── Admin Panel — Firestore backed ──────────────────────
+// Open: click "MY." logo 5 times within 1.5s → password prompt
+// Password: GLB2027Manas! (stored as SHA-256 hash, never in plain text)
 const PASS_HASH = "edb1c5f60f06b659991391476a659a5b377bcf79463dd86de446738f36eafa6f";
-const STORAGE_KEY = "my_portfolio_extra_projects";
 
 async function sha256(text) {
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
-function getExtraProjects() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
-  catch { return []; }
+// ─── Firestore helpers ────────────────────────────────────
+async function loadProjects() {
+  const snap = await getDocs(collection(db, PROJECTS_COL));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
-function saveExtraProjects(list) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-}
+async function addProject(p)    { return (await addDoc(collection(db, PROJECTS_COL), p)).id; }
+async function removeProject(id){ await deleteDoc(doc(db, PROJECTS_COL, id)); }
 
-function renderExtraProjects() {
-  const grid = document.getElementById("projectsGrid");
-  const deployedGrid = document.getElementById("deployedGrid");
+// ─── Render ───────────────────────────────────────────────
+async function renderExtraProjects() {
+  const grid            = document.getElementById("projectsGrid");
+  const deployedGrid    = document.getElementById("deployedGrid");
   const deployedSection = document.getElementById("deployedSection");
   if (!grid) return;
+
   grid.querySelectorAll(".project-card.dynamic").forEach(el => el.remove());
   if (deployedGrid) deployedGrid.querySelectorAll(".project-card.dynamic").forEach(el => el.remove());
 
-  const all = getExtraProjects();
+  const all      = await loadProjects();
   const deployed = all.filter(p => p.demo);
-  const others = all.filter(p => !p.demo);
+  const others   = all.filter(p => !p.demo);
 
   const makeCard = (p) => {
-    const article = document.createElement("article");
-    article.className = "project-card reveal visible dynamic";
-    article.innerHTML = `
+    const a = document.createElement("article");
+    a.className = "project-card reveal visible dynamic";
+    a.innerHTML = `
       <div class="project-domain-bar ${p.barClass || "domain-aiml"}">${p.tag || "Project"}</div>
       <div class="project-body">
         <h3>${p.title}</h3>
@@ -159,20 +175,19 @@ function renderExtraProjects() {
         ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener" class="project-link"><i class="fab fa-github"></i> View on GitHub</a>` : ""}
         ${p.demo ? `<a href="${p.demo}" target="_blank" rel="noopener" class="project-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo</a>` : ""}
       </div>`;
-    return article;
+    return a;
   };
 
   deployed.forEach(p => deployedGrid && deployedGrid.appendChild(makeCard(p)));
   others.forEach(p => grid.appendChild(makeCard(p)));
-
   if (deployedSection) deployedSection.style.display = deployed.length ? "" : "none";
 }
 renderExtraProjects();
 
-// Secret trigger: click logo 5x quickly
-const logoTrigger = document.getElementById("logoTrigger");
+// ─── Secret trigger: click logo 5x quickly ───────────────
+const logoTrigger  = document.getElementById("logoTrigger");
 const adminOverlay = document.getElementById("adminOverlay");
-const adminBox = document.getElementById("adminBox");
+const adminBox     = document.getElementById("adminBox");
 let clickCount = 0, clickTimer = null;
 
 if (logoTrigger) {
@@ -180,15 +195,11 @@ if (logoTrigger) {
     clickCount++;
     if (clickTimer) clearTimeout(clickTimer);
     clickTimer = setTimeout(() => { clickCount = 0; }, 1500);
-    if (clickCount >= 5) {
-      clickCount = 0;
-      e.preventDefault();
-      openAdminLogin();
-    }
+    if (clickCount >= 5) { clickCount = 0; e.preventDefault(); openAdminLogin(); }
   });
 }
 
-function openOverlay() { adminOverlay.classList.add("open"); }
+function openOverlay()  { adminOverlay.classList.add("open"); }
 function closeOverlay() { adminOverlay.classList.remove("open"); adminBox.innerHTML = ""; }
 
 function openAdminLogin() {
@@ -205,67 +216,70 @@ function openAdminLogin() {
   passInput.focus();
   const tryLogin = async () => {
     const hash = await sha256(passInput.value);
-    if (hash === PASS_HASH) {
-      openAdminPanel();
-    } else {
-      document.getElementById("adminErr").style.display = "block";
-      passInput.value = "";
-    }
+    if (hash === PASS_HASH) { openAdminPanel(); }
+    else { document.getElementById("adminErr").style.display = "block"; passInput.value = ""; }
   };
   document.getElementById("adminLoginBtn").addEventListener("click", tryLogin);
   passInput.addEventListener("keydown", e => { if (e.key === "Enter") tryLogin(); });
   document.getElementById("adminCancel").addEventListener("click", closeOverlay);
 }
 
-function openAdminPanel() {
-  const extra = getExtraProjects();
+async function openAdminPanel() {
+  const projects = await loadProjects();
   adminBox.innerHTML = `
     <h3>➕ Add Project</h3>
-    <input type="text" id="pTitle" placeholder="Project title" />
-    <textarea id="pBlurb" rows="3" placeholder="Short description"></textarea>
-    <input type="text" id="pStack" placeholder="Tech stack, comma separated (e.g. Python, FastAPI)" />
-    <input type="text" id="pLink" placeholder="GitHub link (optional)" />
-    <input type="text" id="pDemo" placeholder="Live demo / deployed link (optional)" />
+    <input type="text"      id="pTitle" placeholder="Project title" />
+    <textarea               id="pBlurb" rows="3" placeholder="Short description"></textarea>
+    <input type="text"      id="pStack" placeholder="Tech stack, comma separated" />
+    <input type="text"      id="pLink"  placeholder="GitHub link (optional)" />
+    <input type="text"      id="pDemo"  placeholder="Live demo / deployed link (optional)" />
     <select id="pBar">
       <option value="domain-backend">Backend + AI</option>
       <option value="domain-aiml">ML + Data</option>
       <option value="domain-llm">LLM + RAG</option>
     </select>
-    <input type="text" id="pTag" placeholder="Badge text (e.g. New)" />
+    <input type="text" id="pTag" placeholder="Badge text (e.g. New · Live)" />
+    <p class="admin-error" id="pErr" style="display:none">Title and description are required.</p>
     <div class="admin-actions">
       <button class="btn-secondary" id="adminClose">Close</button>
-      <button class="btn-primary" id="adminAddBtn">Add Project</button>
+      <button class="btn-primary"   id="adminAddBtn">Add to Firebase</button>
     </div>
-    <h3 style="margin-top:18px">Your Added Projects</h3>
+    <h3 style="margin-top:18px">Saved Projects (${projects.length})</h3>
     <div id="adminList">
-      ${extra.length === 0 ? "<p style='opacity:.6;font-size:.85rem'>None yet.</p>" :
-        extra.map((p, i) => `<div class="admin-list-item"><span>${p.title}</span><button data-i="${i}" class="adminDelete">Remove</button></div>`).join("")}
+      ${projects.length === 0
+        ? "<p style='opacity:.6;font-size:.85rem'>None yet.</p>"
+        : projects.map(p => `
+          <div class="admin-list-item">
+            <span>${p.title}${p.demo ? " 🚀" : ""}</span>
+            <button class="adminDelete" data-id="${p.id}">Remove</button>
+          </div>`).join("")}
     </div>`;
 
   document.getElementById("adminClose").addEventListener("click", closeOverlay);
-  document.getElementById("adminAddBtn").addEventListener("click", () => {
-    const title = document.getElementById("pTitle").value.trim();
-    const blurb = document.getElementById("pBlurb").value.trim();
-    const stack = document.getElementById("pStack").value.split(",").map(s => s.trim()).filter(Boolean);
-    const link  = document.getElementById("pLink").value.trim();
-    const demo  = document.getElementById("pDemo").value.trim();
+
+  document.getElementById("adminAddBtn").addEventListener("click", async () => {
+    const title    = document.getElementById("pTitle").value.trim();
+    const blurb    = document.getElementById("pBlurb").value.trim();
+    const stack    = document.getElementById("pStack").value.split(",").map(s => s.trim()).filter(Boolean);
+    const link     = document.getElementById("pLink").value.trim();
+    const demo     = document.getElementById("pDemo").value.trim();
     const barClass = document.getElementById("pBar").value;
-    const tag = document.getElementById("pTag").value.trim();
-    if (!title || !blurb) return;
-    const list = getExtraProjects();
-    list.push({ title, blurb, stack, link, demo, barClass, tag });
-    saveExtraProjects(list);
-    renderExtraProjects();
-    openAdminPanel(); // refresh panel
+    const tag      = document.getElementById("pTag").value.trim();
+    if (!title || !blurb) { document.getElementById("pErr").style.display = "block"; return; }
+
+    const btn = document.getElementById("adminAddBtn");
+    btn.textContent = "Saving…"; btn.disabled = true;
+    await addProject({ title, blurb, stack, link, demo, barClass, tag });
+    await renderExtraProjects();
+    await openAdminPanel(); // refresh list
   });
 
   adminBox.querySelectorAll(".adminDelete").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const list = getExtraProjects();
-      list.splice(Number(btn.dataset.i), 1);
-      saveExtraProjects(list);
-      renderExtraProjects();
-      openAdminPanel();
+    btn.addEventListener("click", async () => {
+      btn.textContent = "…"; btn.disabled = true;
+      await removeProject(btn.dataset.id);
+      await renderExtraProjects();
+      await openAdminPanel();
     });
   });
 
